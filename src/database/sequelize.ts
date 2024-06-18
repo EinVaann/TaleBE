@@ -1,7 +1,11 @@
-import { Sequelize } from 'sequelize';
+import { Sequelize } from "sequelize";
+import dotenv from "dotenv";
 
-const sequelize = new Sequelize('postgres://postgres.aitcvpzzmnnclnymbndj:einacht3012@aws-0-us-west-1.pooler.supabase.com:6543/postgres', {
-  dialect: 'postgres',
+// Load environment variables
+dotenv.config();
+console.log()
+const sequelize = new Sequelize(process.env.DATABASE_URL || "", {
+  dialect: "postgres",
 });
 
 export default sequelize;

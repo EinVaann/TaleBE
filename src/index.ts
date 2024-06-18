@@ -6,8 +6,11 @@ import typeDefs from "./schema";
 import resolvers from "./resolvers";
 import sequelize from "./database/sequelize";
 import { authenticateJWT } from "./middlewares/auth";
-import { formatError } from '../src/utils/formatErrors';
+import { formatError } from './utils/formatErrors';
+import dotenv from 'dotenv';
 
+console.log("START")
+dotenv.config();
 const PORT = process.env.PORT || 4000;
 
 async function connectToDatabase() {
@@ -25,8 +28,9 @@ async function connectToDatabase() {
 
 async function startApolloServer() {
   const app = express();
+  console.log("App created");
   app.use(authenticateJWT);
-
+  console.log("Authentication set");
   const server = new ApolloServer({
     typeDefs,
     resolvers,
@@ -36,12 +40,13 @@ async function startApolloServer() {
         req,
       };
     },
+    introspection: true,
     formatError
   });
 
   await server.start();
   server.applyMiddleware({ app });
-
+  console.log("Server started");
   app.listen(PORT, () => {
     console.log(
       `Server listening on http://localhost:${PORT}${server.graphqlPath}`
